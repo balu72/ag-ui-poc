@@ -906,3 +906,171 @@ AI agents can control UIs through standardized events, enabling true agent-drive
 **Built with Pure AG-UI Protocol (REST + SSE) | Powered by Ollama & Mistral**
 
 🎉 **Welcome to the future of agent-driven interfaces!** 🎉
+
+---
+
+## ❓ FAQ (Frequently Asked Questions)
+
+### **Q: Are we showing the response as a stream in real-time? Is that the only advantage of AG-UI protocol?**
+
+**A: Yes, we stream in real-time, but that's only PART of the AG-UI advantage!**
+
+#### **What We're Actually Doing:**
+
+**1. Real-time Streaming (SSE) ✅**
+
+Yes, the LLM response appears **word-by-word in real-time**!
+
+**You can see this when you type a message:**
+```
+User: "What is AI?"
+
+Frontend shows (progressively):
+T=200ms: "Artificial"
+T=220ms: "Artificial Intelligence"
+T=240ms: "Artificial Intelligence is"
+T=260ms: "Artificial Intelligence is a"
+...continues...
+```
+
+**Without streaming (traditional):**
+```
+User: "What is AI?"
+[Wait 2 seconds...]
+Frontend shows: "Artificial Intelligence is a field of computer science..."
+```
+
+**Code that makes this happen:**
+```typescript
+// Frontend receives each chunk
+if (eventData.type === "text_message") {
+  assistantMessage += eventData.data.content;  // ← Accumulate
+  updateUI(assistantMessage);  // ← Update UI immediately
+}
+```
+
+---
+
+**2. UI Control (AG-UI Protocol) ⭐ - The REAL Magic**
+
+But **streaming alone is NOT AG-UI protocol!**
+
+The **true power** of AG-UI protocol is the **UI Control Events**:
+
+```
+User: "Change color to light green"
+
+What happens:
+1. Backend detects "color" command
+2. Sends UI_CONTROL event IMMEDIATELY
+3. Frontend changes color INSTANTLY (before AI even responds)
+4. Then AI response streams
+```
+
+**This is the AG-UI advantage:**
+```typescript
+// AI can control the UI!
+if (eventData.type === "ui_control") {
+  if (eventData.data.action === "change_theme") {
+    setThemeColor(eventData.data.color);  // ← UI changes!
+  }
+}
+```
+
+---
+
+#### **AG-UI Protocol = Streaming + UI Control**
+
+**Two Advantages Combined:**
+
+**Advantage 1: Real-time Streaming (SSE)**
+- See AI response word-by-word
+- Better UX
+- Feels alive
+- **Many chatbots do this!**
+
+**Advantage 2: UI Control (AG-UI Special!)** ⭐
+- AI controls the interface
+- Changes colors
+- Adds buttons
+- Could add forms, charts, modals, etc.
+- **This is unique to AG-UI!**
+
+---
+
+#### **Comparison:**
+
+**Traditional Chatbot:**
+```
+User: "Change color to blue"
+AI: "I'm sorry, I can't change colors. Please click the theme button."
+```
+**AI can only talk, can't act!**
+
+**Our AG-UI POC:**
+```
+User: "Change color to blue"
+[UI instantly turns blue]
+AI: "Done! I've changed the color to blue."
+```
+**AI can talk AND act!**
+
+---
+
+#### **What Makes AG-UI Special?**
+
+Not just streaming (that's SSE - common)
+
+**But the combination:**
+1. ✅ Natural language UI commands
+2. ✅ Backend detects intent
+3. ✅ **Sends UI control events** ⭐
+4. ✅ Frontend executes UI changes
+5. ✅ Streams AI response
+
+---
+
+#### **The Key Insight:**
+
+**Streaming alone:** Good UX, but AI is just talking
+
+**AG-UI Protocol:** AI is **doing things** - controlling the interface!
+
+```
+Traditional: User → Click buttons → UI changes
+AG-UI:      User → Say command → AI changes UI
+```
+
+---
+
+#### **Try This in the POC:**
+
+**1. Just chat (streaming only):**
+```
+"What is AG-UI protocol?"
+→ Response streams word-by-word ✅
+→ But UI doesn't change
+```
+
+**2. UI command (AG-UI protocol!):**
+```
+"Change color to light green"
+→ UI turns green INSTANTLY! ⭐
+→ THEN response streams ✅
+```
+
+**The instant UI change is the AG-UI magic!**
+
+---
+
+#### **Summary:**
+
+✅ **YES, we stream in real-time** (word-by-word responses)
+
+❌ **NO, that's not the only AG-UI advantage**
+
+⭐ **The MAIN AG-UI advantage is UI Control Events** - where the AI can actually manipulate the interface through standardized events!
+
+**AG-UI = Streaming (good) + UI Control (revolutionary)**
+
+**Streaming makes it feel alive, UI Control makes it intelligent!** 🤖✨
